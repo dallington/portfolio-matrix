@@ -1,0 +1,15 @@
+---
+title: 'Messaging Queue Visualizer'
+summary: 'A real-time simulation of a distributed task queue with worker polling and failure handling.'
+type: 'simulation'
+difficulty: 'high'
+tags: ['Systems', 'Real-time', 'Architecture']
+component: 'SystemDesignPlayground'
+hypothesis: 'Horizontal scaling of workers combined with "Skip Locked" polling is the most efficient way to scale job processing in SQL environments.'
+findings:
+  - 'Transactional safety is non-negotiable for job status changes.'
+  - 'Worker heartbeat monitoring is essential for ghost-job recovery.'
+  - 'Canvas visualization helps identify hot-spots in worker utilization.'
+---
+
+(Interactive component will be hydrated here)

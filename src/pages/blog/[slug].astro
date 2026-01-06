@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ChevronLeft, Calendar, Clock } from 'lucide-react';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts');
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title}>
+	<article class="pt-32 pb-24 px-6 min-h-screen">
+		<div class="max-w-4xl mx-auto">
+			<a href="/blog" class="flex items-center gap-2 mb-12 font-bold text-blue-600 hover:text-blue-700 transition-colors">
+				<ChevronLeft size={16} /> Back to Blog
+			</a>
+			
+			<header class="mb-16">
+				<div class="flex items-center gap-4 mb-6">
+					{post.data.tags.map(t => (
+						<span class="text-[10px] mono text-gray-400 uppercase tracking-[0.2em]">#{t}</span>
+					))}
+				</div>
+				<h1 class="text-4xl md:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] mb-8 font-sans">
+					{post.data.title}
+				</h1>
+				<div class="flex items-center gap-8 py-6 border-y border-gray-100 dark:border-[#1A1A1A]">
+					<div class="flex items-center gap-2">
+						<Calendar size={14} class="text-gray-400" />
+						<span class="text-xs font-bold uppercase mono text-blue-600">{post.data.date}</span>
+					</div>
+					<div class="flex items-center gap-2">
+						<Clock size={14} class="text-gray-400" />
+						<span class="text-xs font-bold uppercase mono text-gray-500">{post.data.readTime}</span>
+					</div>
+				</div>
+			</header>
+
+			<div class="prose prose-lg dark:prose-invert max-w-none transition-colors duration-500 mb-24 font-sans">
+				<Content />
+			</div>
+
+		</div>
+	</article>
+</BaseLayout>

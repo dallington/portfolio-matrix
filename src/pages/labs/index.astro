@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LabCard } from '../../components/react/LabCard';
+import { getCollection } from 'astro:content';
+
+const labs = await getCollection('labs');
+const sortedLabs = labs.map(l => ({id: l.slug, ...l.data}));
+---
+
+<BaseLayout title="Labs | Dallington">
+    <section class="pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A]">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-24 max-w-3xl">
+          <div class="hidden text-[var(--accent)] mono mb-4 group-[.recruiter-mode]:hidden">// EXPERIMENTAL_ARCHIVE</div>
+          <h1 class="text-6xl md:text-[8rem] font-black text-gray-900 dark:text-white uppercase tracking-tighter leading-[0.8]">
+             Experimental Projects
+          </h1>
+          <p class="mt-8 text-xl text-gray-500 font-light max-w-2xl leading-relaxed">
+            A collection of technical simulations, performance experiments, and proof-of-concepts built to test the boundaries of distributed systems and high-density frontend rendering.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedLabs.map((lab) => (
+            <LabCard client:visible lab={lab} />
+          ))}
+        </div>
+      </div>
+    </section>
+</BaseLayout>

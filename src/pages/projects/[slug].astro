@@ -1,0 +1,179 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  ChevronLeft,
+  Target,
+  Layers,
+  Terminal,
+  BarChart4,
+  Code2,
+  Zap,
+  Trophy,
+  AlertCircle,
+} from "lucide-react";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const {
+  title,
+  impact,
+  tags,
+  description,
+  problem,
+  approach,
+  challengesList,
+  outcome,
+  metrics,
+  projectLayout,
+  codeSnippet,
+} = project.data;
+---
+
+<BaseLayout title={title}>
+  <article class="pt-32 pb-24 px-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+      <a
+        href="/"
+        class="flex items-center gap-2 mb-12 font-bold transition-all font-sans text-blue-600 hover:text-blue-700"
+      >
+        <ChevronLeft size={16} /> Back to Projects
+      </a>
+
+      <header class="mb-32">
+        <div class="flex flex-wrap gap-2 mb-10">
+          {
+            project.data.tags.map((tag) => (
+              <span class="text-[10px] mono px-3 py-1 border border-gray-200 dark:border-[#333] text-gray-500 uppercase tracking-widest font-black">
+                #{tag}
+              </span>
+            ))
+          }
+        </div>
+        <h1
+          class="text-6xl md:text-[8rem] font-black text-gray-900 dark:text-white mb-12 leading-[0.85] font-sans tracking-tight"
+        >
+          {project.data.title}
+        </h1>
+        <div
+          class="p-12 border-l-8 bg-blue-50 dark:bg-blue-900/10 border-blue-600"
+        >
+          <p
+            class="text-2xl md:text-5xl font-light italic leading-tight text-blue-600"
+          >
+            "{project.data.impact}"
+          </p>
+        </div>
+      </header>
+
+      <div class="space-y-40">
+        {
+          /* We can structure the remaining content using MDX components or extracted data. 
+               Since the original design had structured sections (Challenge, Strategy, etc.),
+               we can display them if they exist in frontmatter, or render the generic Content.
+           */
+        }
+
+        <div class="grid lg:grid-cols-[1fr_350px] gap-16 items-start">
+          <div class="prose prose-2xl dark:prose-invert max-w-none">
+            <p
+              class="text-gray-600 dark:text-gray-400 font-light leading-relaxed"
+            >
+              {project.data.problem}
+            </p>
+            <!-- Render MDX Content here for detailed sections -->
+            <Content />
+          </div>
+
+          <div class="p-8 border bg-slate-50 dark:bg-slate-900 rounded-3xl">
+            <div
+              class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-6 flex items-center gap-2"
+            >
+              <Target size={14} /> Key Metrics
+            </div>
+            <div class="space-y-6">
+              {
+                project.data.metrics.map((m) => (
+                  <div class="border-b border-gray-100 dark:border-gray-800 pb-4 last:border-0">
+                    <div class="text-[10px] mono text-gray-500 uppercase">
+                      {m.label}
+                    </div>
+                    <div class="text-3xl font-black text-blue-600">
+                      {m.value}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        {
+          project.data.challengesList && (
+            <section>
+              <div class="flex items-center gap-4 mb-8">
+                <div class="flex items-center justify-center w-10 h-10 border border-blue-600 text-blue-600 rounded-full">
+                  03
+                </div>
+                <h2 class="text-sm font-black uppercase tracking-[0.2em] font-sans text-slate-900">
+                  Engineering Hurdles
+                </h2>
+              </div>
+              <div class="grid md:grid-cols-2 gap-12">
+                {project.data.challengesList.map((challenge, i) => (
+                  <div class="p-12 border bg-white dark:bg-slate-900 border-gray-100 dark:border-slate-800 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all">
+                    <h4 class="text-2xl font-black mb-6 font-sans dark:text-white">
+                      #{i + 1} {challenge.title}
+                    </h4>
+                    <div class="space-y-6">
+                      <div>
+                        <span class="text-[9px] font-black uppercase tracking-widest text-gray-500 block mb-2">
+                          The Variable
+                        </span>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-light">
+                          {challenge.description}
+                        </p>
+                      </div>
+                      <div class="p-6 border-l-4 bg-blue-50 dark:bg-blue-900/10 border-blue-600">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-gray-500 block mb-2">
+                          The Solution
+                        </span>
+                        <p class="text-sm italic text-gray-700 dark:text-gray-200 leading-relaxed">
+                          {challenge.solution}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {
+          projectLayout === "complete" && (
+            <section>
+              <div class="p-12 border mono text-sm overflow-x-auto shadow-2xl relative group bg-gray-950 border-gray-800 rounded-[2rem]">
+                <div class="absolute top-6 right-8 text-[10px] mono opacity-40 uppercase tracking-widest text-gray-500">
+                  SOURCE_MODULE
+                </div>
+                <pre class="text-gray-300 leading-relaxed py-4">
+                  <code>{project.data.codeSnippet}</code>
+                </pre>
+              </div>
+            </section>
+          )
+        }
+      </div>
+    </div>
+  </article>
+</BaseLayout>

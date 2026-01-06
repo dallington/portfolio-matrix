@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { 
+  User, 
+  Target, 
+  History, 
+  Heart, 
+  ChevronRight, 
+  Terminal, 
+  ShieldCheck, 
+  Zap,
+  Coffee,
+  Globe
+} from 'lucide-react';
+
+const isDev = false; // Default to prod (clean) look for static page, or could be dynamic with React island if interactive. 
+// However, the original AboutPage uses `useMode`. To keep it fully interactive (switchable), 
+// we should wrap it in a React island or replicate the logic with Astro script or just default to one mode.
+// Given it's a content page, pure Astro with a clean default is often best, but users might expect consistency.
+// The user asked for "minimal JavaScript". 
+// I'll make it static Astro HTML with Recruiter Mode (clean) style by default, 
+// but perhaps allowing a "Dev Mode" toggle via React island would be overkill if the whole page is static.
+// Actually, `BaseLayout` has the toggles. But the content styling relies on `isDev`.
+// Since `isDev` is global state, if we want this page to react to it, it MUST be a React Island entirely, OR we use CSS variables/classes toggled on <body>.
+// Current implementation uses `useStore` in React components. Astro pages are static.
+// If I want the *entire page content* to change style based on mode, I have two options:
+// 1. Make the whole content a React Island (client:load).
+// 2. Use CSS variables for everything (harder to refactor effectively).
+// 3. Just assume "Visual/Recruiter" mode for the static pages (Resume/About) as they are "official" documents.
+// Resume is definitely static. About page... likely static too.
+// "Resume page must be pure Astro". About wasn't specified but likely same bucket.
+// I will build it as a static Astro page using the "Recruiter/Clean" style (Standard, not Dev/Cyberpunk). 
+// This fits the "minimal JS" goal.
+---
+
+<BaseLayout title="About | Dallington">
+    <article class="pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-500">
+      <div class="max-w-4xl mx-auto">
+        
+        <header class="mb-20">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/10 dark:text-blue-400 mb-6">
+                <User size={14} />
+                <span class="text-[10px] uppercase font-black tracking-widest">Profile & Background</span>
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black text-gray-900 dark:text-white mb-8 tracking-tight leading-[0.9]">
+              Beyond the <span class="text-blue-600">Code</span>
+            </h1>
+            <p class="text-2xl text-gray-600 dark:text-gray-400 leading-relaxed font-light">
+              I'm a product-focused engineer who bridges the gap between complex distributed systems and intuitive user experiences.
+            </p>
+        </header>
+
+        <div class="space-y-24">
+            
+            {/* Mission */}
+            <section class="grid md:grid-cols-[200px_1fr] gap-12">
+                <div class="text-blue-600">
+                    <Target size={32} />
+                </div>
+                <div>
+                     <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tight">Mission</h3>
+                     <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                        My goal is to build software that feels inevitable. I believe the best engineering disappears, leaving only the utility and the experience.
+                        Whether optimizing database queries or tweaking animation curves, I obsess over the details that compound into excellence.
+                     </p>
+                     <div class="p-6 bg-gray-50 dark:bg-[#111] border-l-4 border-blue-600 rounded-r-xl">
+                        <p class="italic text-gray-700 dark:text-gray-300 font-medium">
+                            "Simplicity is the ultimate sophistication."
+                        </p>
+                     </div>
+                </div>
+            </section>
+
+            {/* Journey */}
+            <section class="grid md:grid-cols-[200px_1fr] gap-12">
+                <div class="text-blue-600">
+                    <History size={32} />
+                </div>
+                <div>
+                     <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tight">Journey</h3>
+                     <div class="space-y-12 relative border-l border-gray-200 dark:border-[#222] ml-3 pl-12">
+                        <div class="relative">
+                            <span class="absolute -left-[55px] top-1 w-4 h-4 rounded-full bg-blue-600 border-4 border-white dark:border-[#0A0A0A]"></span>
+                            <div class="text-sm font-bold text-blue-600 mb-2">2023 - Present</div>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Senior Fullstack Engineer</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Leading architecture for high-scale e-commerce platforms, moving monoliths to event-driven microservices.</p>
+                        </div>
+                         <div class="relative">
+                            <span class="absolute -left-[55px] top-1 w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-700 border-4 border-white dark:border-[#0A0A0A]"></span>
+                            <div class="text-sm font-bold text-gray-400 mb-2">2020 - 2023</div>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Product Engineer</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Built and shipped 4 major SaaS products from 0 to 1. Focused on rapid iteration and user-centric design.</p>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute -left-[55px] top-1 w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-700 border-4 border-white dark:border-[#0A0A0A]"></span>
+                            <div class="text-sm font-bold text-gray-400 mb-2">2018 - 2020</div>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Frontend Specialist</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Crafting pixel-perfect interfaces and robust component libraries for fintech dashboards.</p>
+                        </div>
+                     </div>
+                </div>
+            </section>
+
+            {/* Why Me */}
+            <section class="grid md:grid-cols-[200px_1fr] gap-12">
+                <div class="text-blue-600">
+                    <ShieldCheck size={32} />
+                </div>
+                <div>
+                     <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-8 uppercase tracking-tight">Why I'm Different</h3>
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-6 border border-gray-100 dark:border-[#222] rounded-2xl bg-white dark:bg-[#111] shadow-sm">
+                            <Terminal size={20} class="text-blue-600 mb-4" />
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">Engineering Rigor</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">I write type-safe, tested, and documented code that scales.</p>
+                        </div>
+                        <div class="p-6 border border-gray-100 dark:border-[#222] rounded-2xl bg-white dark:bg-[#111] shadow-sm">
+                            <Heart size={20} class="text-blue-600 mb-4" />
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">Product Sense</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">I don't just build features; I solve user problems and drive metrics.</p>
+                        </div>
+                         <div class="p-6 border border-gray-100 dark:border-[#222] rounded-2xl bg-white dark:bg-[#111] shadow-sm">
+                            <Zap size={20} class="text-blue-600 mb-4" />
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">Velocity</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">I ship fast without breaking things, leveraging modern tooling.</p>
+                        </div>
+                         <div class="p-6 border border-gray-100 dark:border-[#222] rounded-2xl bg-white dark:bg-[#111] shadow-sm">
+                            <Globe size={20} class="text-blue-600 mb-4" />
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">Communication</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">I bridge the gap between technical and non-technical stakeholders.</p>
+                        </div>
+                     </div>
+                </div>
+            </section>
+            
+             {/* CTA */}
+             <section class="p-12 bg-blue-600 rounded-[2rem] text-center text-white">
+                <Coffee size={48} class="mx-auto mb-6 text-blue-200" />
+                <h3 class="text-3xl font-black uppercase mb-4 tracking-tight">Let's chat about your stack</h3>
+                <p class="text-blue-100 max-w-lg mx-auto mb-8 text-lg">
+                    I'm currently available for senior roles and interesting technical challenges.
+                </p>
+                <a href="mailto:hello@dallington.dev" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-blue-600 rounded-xl font-black uppercase tracking-widest hover:bg-blue-50 transition-colors">
+                    hello@dallington.dev <ChevronRight size={16} />
+                </a>
+             </section>
+
+        </div>
+
+      </div>
+    </article>
+</BaseLayout>

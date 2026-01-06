@@ -1,0 +1,50 @@
+---
+title: 'Pulse: Distributed Task Queue'
+impact: 'Processed 500M+ background jobs with 0 data loss'
+tags: ['Node.js', 'TypeScript', 'PostgreSQL', 'Docker']
+description: 'A high-performance, fault-tolerant job queue system for orchestrating complex background workflows and messaging.'
+problem: 'Out-of-the-box solutions like BullMQ were hitting memory limits at our scale; we needed a DB-backed system with better observability.'
+approach: 'Implemented a WAL-based polling mechanism in PostgreSQL and a worker-orchestrator pattern in Node.js for horizontal scaling.'
+# Note: transforming 'challenges' string to list item for consistency if needed, but schema allows both or I should stick to schema. schema says challengesList optional. 
+# The original object has 'challenges' string. I will map it to challengesList with one item or just descriptions.
+# Wait, the schema I defined has `challengesList`. The data has `challenges` string. I should format it into `challengesList` or adjust schema? 
+# I will adjust the content to fit the schema I defined which matches the more complex project structure, or simplified.
+# Actually, the schema for 'minimal' layout projects might differ. Let's check `distro-queue` object in constants.
+# It has `challenges: string`.
+# I will just put it in `description` or create a single challenge item.
+challengesList:
+  - title: 'Reliability at Scale'
+    description: 'Ensuring "Exactly Once" delivery semantics while maintaining high throughput across 20+ worker instances.'
+    solution: 'Implemented row-locking (SKIP LOCKED) in Postgres.'
+outcome:
+  - 'Successfully handled 500M jobs over 12 months'
+  - 'Advanced retry-strategies with exponential backoff'
+  - 'Real-time visualization dashboard for job states'
+metrics:
+  - label: 'Jobs Processed'
+    value: '500M+'
+  - label: 'Throughput'
+    value: '1.2k/s'
+  - label: 'Reliability'
+    value: '100%'
+projectLayout: 'minimal'
+codeSnippet: |
+  // Worker orchestration logic
+  async function fetchJob(workerId: string) {
+    return db.transaction(async tx => {
+      const job = await tx.query(`
+        UPDATE jobs SET 
+          status = 'processing', 
+          worker_id = $1, 
+          started_at = NOW()
+        WHERE id = (
+          SELECT id FROM jobs 
+          WHERE status = 'queued' AND scheduled_at <= NOW()
+          FOR UPDATE SKIP LOCKED
+          LIMIT 1
+        ) RETURNING *
+      `, [workerId]);
+      return job.rows[0];
+    });
+  }
+---

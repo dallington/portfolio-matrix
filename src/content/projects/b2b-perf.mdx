@@ -1,0 +1,66 @@
+---
+title: 'B2B E-commerce Performance Overhaul'
+impact: 'Conversion rate increased by 23% via Core Web Vitals optimization'
+tags: ['Performance', 'PHP', 'JavaScript', 'Lighthouse']
+description: 'A high-impact performance strategy for a large-scale B2B platform handling thousands of daily transactions and $2,500+ average order values.'
+problem: 'A large-scale B2B e-commerce platform was hemorrhaging conversions due to performance issues. Despite handling thousands of daily transactions, the frontend was legacy PHP server-side rendering with poor Core Web Vitals (Desktop: 60%, Mobile: 40%). Slow pages were leaving millions on the table.'
+approach: "Progressive Enhancement Within Constraints. Since a full rewrite wasn't an option, we implemented a multi-layered optimization strategy: Critical CSS extraction, aggressive WebP conversion, and deferred JS loading."
+challengesList:
+  - title: 'Legacy PHP SSR Constraints'
+    description: 'Most modern optimization guides assume a SPA framework. We had traditional page loads with PHP templating.'
+    solution: 'Inlined critical path CSS (extracted with PurgeCSS), preloaded key resources, and minimized render-blocking scripts at the template level.'
+  - title: 'Blocking Third-Party Scripts'
+    description: 'The site had 12 integrations (analytics, chat, A/B testing) all loading synchronously.'
+    solution: 'Implemented a requestIdleCallback wrapper to defer all non-critical scripts until the main thread was free.'
+  - title: 'Mobile on 4G Performance'
+    description: 'Desktop improvements were easier, but mobile remained unstable on slow connections.'
+    solution: 'Implemented adaptive loading via Network Information API to serve lower-res assets on slow connections and lazy-loaded product grids.'
+tradeoffs: 'We sacrificed fancy parallax animations and auto-playing videos to prioritize TTI. Performance was chosen over "flashy" features to stabilize the revenue funnel.'
+outcome:
+  - 'Desktop Lighthouse: 60% → 90%'
+  - 'Mobile Lighthouse: 40% → 85%'
+  - 'Conversion rate increased by 23% (2.1% → 2.6%)'
+  - 'Estimated revenue impact: $840K annually'
+metric:
+  - label: 'Lighthouse'
+    value: '90/100'
+  - label: 'Conv. Lift'
+    value: '+23%'
+  - label: 'Rev. Impact'
+    value: '$840k'
+projectLayout: 'complete'
+codeSnippet: |
+  // Intersection Observer for lazy images
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        const src = img.dataset.src;
+        
+        // Preload WebP, fallback to original
+        const webpSrc = src.replace(/\.(jpg|png)$/, '.webp');
+        
+        fetch(webpSrc)
+          .then(res => res.ok ? webpSrc : src)
+          .then(finalSrc => {
+            img.src = finalSrc;
+            img.classList.add('loaded');
+          })
+          .catch(() => img.src = src);
+        
+        observer.unobserve(img);
+      }
+    });
+  }, { rootMargin: '50px' });
+
+  document.querySelectorAll('img[data-src]').forEach(img => {
+    imageObserver.observe(img);
+  });
+metrics:
+  - label: 'Lighthouse'
+    value: '90/100'
+  - label: 'Conv. Lift'
+    value: '+23%'
+  - label: 'Rev. Impact'
+    value: '$840k'
+---

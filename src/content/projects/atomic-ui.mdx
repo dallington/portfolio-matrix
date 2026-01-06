@@ -1,0 +1,37 @@
+---
+title: 'Atomic UI 2.0'
+impact: 'Reduced design-to-production time by 60%'
+tags: ['React', 'TypeScript', 'Tailwind', 'Storybook']
+description: 'An enterprise-grade design system that proves high-end frontend engineering is about systems, not just styles.'
+problem: 'Teams were reinventing UI logic for common components (Modals, Forms), leading to inconsistent UX and security vulnerabilities.'
+approach: 'Built a "headless-first" component library focusing on accessibility (ARIA) and type-safe styling using Tailwind variables.'
+challengesList:
+   - title: 'Type Safety & thematic flexibility'
+     description: 'Maintaining 100% test coverage while supporting highly dynamic, consumer-provided themes.'
+     solution: 'Leveraged TypeScript generics and CSS variables.'
+outcome:
+  - 'Standardized UI across 12 internal products'
+  - 'Zero regressions in 2 years of active development'
+  - 'Built-in accessibility audits (WCAG AAA)'
+metrics:
+  - label: 'A11y Score'
+    value: '100/100'
+  - label: 'Adoption'
+    value: '12 Apps'
+  - label: 'Tests'
+    value: '1.4k'
+projectLayout: 'minimal'
+codeSnippet: |
+  // Accessible component pattern with strict types
+  type ButtonProps<T extends React.ElementType> = {
+    as?: T;
+    variant: 'primary' | 'ghost' | 'danger';
+  } & React.ComponentPropsWithoutRef<T>;
+
+  export const Button = <T extends React.ElementType = 'button'>({
+    as, variant, ...props
+  }: ButtonProps<T>) => {
+    const Component = as || 'button';
+    return <Component className={classes[variant]} {...props} />;
+  };
+---

@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Hero } from "../components/react/Hero";
+import { ProjectShowcase } from "../components/react/ProjectShowcase";
+import { TechnicalDNA } from "../components/react/TechnicalDNA";
+import { PRINCIPLES } from "../data";
+import { BlogPreview } from "../components/react/BlogPreview";
+import { ContactCTA } from "../components/react/ContactCTA";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const posts = await getCollection("posts");
+
+const latestPosts = posts
+  .sort(
+    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+  )
+  .slice(0, 3);
+// Filter or sort projects if needed
+const showcaseProjects = projects.map((p) => ({
+  id: p.slug,
+  ...p.data,
+  codeSnippet: p.data.codeSnippet || "",
+}));
+---
+
+<BaseLayout title="Dallington | Senior Fullstack Engineer">
+  <Hero client:load />
+
+  <ProjectShowcase client:visible projects={showcaseProjects} />
+
+  <TechnicalDNA client:visible />
+
+  {
+    /* Engineering Principles - Static Astro Component with interactivity via CSS & Nanostores (handled by BaseLayout/Header state) 
+      Note: We can't easily switch text content based on store in a static component without re-rendering. 
+      For full "Dev Mode" text switching, we need a hydrated component or just use CSS classes with the 'recruiter-mode' class on body.
+      However, switching text content (e.g. "How_I_Code" vs "Engineering Principles") requires JS.
+      I will keep it static for now, defaulting to Dev Mode style or better yet, make a small island for the Title.
+  */
+  }
+  <!-- Principles Section -->
+  <section class="py-24 px-6 border-b border-gray-200 dark:border-[#1A1A1A]">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-16">
+        <div
+          class="hidden text-[var(--accent)] mono mb-4 group-[.recruiter-mode]:hidden"
+        >
+          // CRAFT_PHILOSOPHY
+        </div>
+        <h2
+          class="text-5xl font-black text-gray-900 dark:text-white uppercase tracking-tighter"
+        >
+          Engineering Principles
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-12">
+        {
+          PRINCIPLES.map((principle, i) => (
+            <div class="group transition-transform hover:translate-x-2 duration-300">
+              <div class="text-4xl font-black mono mb-4 transition-colors text-gray-200 dark:text-[#1A1A1A] group-hover:text-[var(--accent)]">
+                0{i + 1}
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 uppercase mono font-sans">
+                {principle.title}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                {principle.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Preview Section -->
+  <BlogPreview
+    client:visible
+    posts={latestPosts.map((p) => ({ ...p.data, id: p.slug }))}
+  />
+  <ContactCTA client:visible />
+</BaseLayout>

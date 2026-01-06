@@ -1,0 +1,163 @@
+---
+import { Header } from "../components/react/Header";
+import { CustomCursor } from "../components/react/CustomCursor";
+import { CommandPalette } from "../components/react/CommandPalette";
+import { getCollection } from "astro:content";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+// Fetch all content for the command palette
+const projects = await getCollection("projects");
+const posts = await getCollection("posts");
+const labs = await getCollection("labs");
+
+const projectData = projects.map((p) => ({
+  id: p.slug,
+  ...p.data,
+  codeSnippet: p.data.codeSnippet || "",
+}));
+
+const postData = posts.map((p) => ({
+  id: p.slug,
+  ...p.data,
+  codeSnippet: p.data.codeSnippet || "",
+}));
+
+const labData = labs.map((l) => ({
+  id: l.slug,
+  ...l.data,
+  codeSnippet: "", // Labs don't have codeSnippet in schema, defaulting to empty string
+}));
+// Wait, labData mapping in 485 was:
+// const labData = labs.map((l) => ({
+//   id: l.slug,
+//   ...l.data,
+// }));
+// I should stick to that to avoid errors. The previous file didn't mapped codeSnippet for labs.
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Dallington Portfolio" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <style is:global>
+      :root {
+        --accent: #00ff88;
+      }
+      .mono {
+        font-family: "JetBrains Mono", "Fira Code", "Roboto Mono", monospace;
+      }
+      .font-sans {
+        font-family: "Inter", system-ui, sans-serif;
+      }
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+    </style>
+    <script is:inline>
+      // Immediate execution to prevent FOUC
+      (function () {
+        // 1. Restore Mode (Dev vs Recruiter)
+        const savedMode = localStorage.getItem("app_mode") || "dev";
+        const root = document.documentElement;
+
+        if (savedMode === "dev") {
+          root.style.setProperty("--accent", "#00FF88");
+          root.classList.remove("recruiter-mode");
+        } else {
+          root.style.setProperty("--accent", "#2563eb");
+          root.classList.add("recruiter-mode");
+        }
+
+        // 2. Restore Theme (Dark vs Light)
+        const savedTheme = localStorage.getItem("theme");
+        const systemDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+
+        if (savedTheme === "dark" || (!savedTheme && systemDark)) {
+          root.classList.add("dark");
+        } else {
+          root.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      import { mode } from "../store";
+
+      // Subscribe to store changes for hydration
+      mode.subscribe((newMode) => {
+        const root = document.documentElement;
+        if (newMode === "dev") {
+          root.style.setProperty("--accent", "#00FF88");
+          root.classList.remove("recruiter-mode");
+        } else {
+          root.style.setProperty("--accent", "#2563eb");
+          root.classList.add("recruiter-mode");
+        }
+      });
+    </script>
+  </head>
+  <body class="bg-white dark:bg-[#0A0A0A] transition-colors duration-500">
+    <Header client:load />
+    <CustomCursor client:load />
+    <CommandPalette
+      client:load
+      projects={projectData}
+      posts={postData}
+      labs={labData}
+    />
+    <slot />
+    <footer
+      class="py-12 px-6 border-t border-gray-200 dark:border-[#1A1A1A] bg-gray-50 dark:bg-[#0A0A0A] mt-auto"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
+      >
+        <div class="text-sm text-gray-500 dark:text-gray-400 font-mono">
+          &copy; {new Date().getFullYear()} Dallington. All rights reserved.
+        </div>
+        <div class="flex gap-6">
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-gray-500 hover:text-[var(--accent)] transition-colors"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-gray-500 hover:text-[var(--accent)] transition-colors"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="mailto:hello@dallington.dev"
+            class="text-gray-500 hover:text-[var(--accent)] transition-colors"
+          >
+            Email
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
