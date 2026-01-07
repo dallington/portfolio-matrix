@@ -31,14 +31,13 @@ export const PostListItem = ({ post }: PostListItemProps) => {
           </span>
           <span className="text-gray-300 dark:text-gray-700">/</span>
           <span className="text-gray-500 dark:text-gray-500">
-            {post.readTime}
+            {post.readTime} to read
           </span>
-          <span className="text-gray-300 dark:text-gray-700 mx-2">—</span>
-          <div className="flex gap-3">
-            {post.tags.map(tag => (
-              <span key={tag} className="text-gray-400 dark:text-gray-600 uppercase">#{tag}</span>
-            ))}
-          </div>
+        </div>
+        <div className="flex gap-3 mb-4">
+          {post.tags.map(tag => (
+            <span key={tag} className="text-[11px] text-gray-400 dark:text-gray-600 uppercase">#{tag}</span>
+          ))}
         </div>
         <h3 className={`text-2xl md:text-5xl font-black text-gray-900 dark:text-white mb-6 transition-colors duration-500 ${isDev ? 'mono group-hover:text-[var(--accent)] tracking-tighter' : 'font-sans group-hover:text-blue-600 tracking-tight'}`}>
           {post.title}

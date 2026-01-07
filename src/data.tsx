@@ -74,6 +74,12 @@ export const Icons = {
   ),
   MySQL: (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2h-4zM4 5h16v11H4V5z"/></svg>
+  ),
+  ReactNative: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 21.6c-2.4 0-4.6-.8-6.4-2.2-.6-.5-.5-1.3.1-1.7.5-.4 1.3-.4 1.8 0 1.4 1.1 3.1 1.7 5 1.7s3.6-.6 5-1.7c.5-.4 1.3-.4 1.8 0 .6.4.7 1.2.1 1.7-1.8 1.4-4 2.2-6.4 2.2zM12 2.4c2.4 0 4.6.8 6.4 2.2.6.5.5 1.3-.1 1.7-.5.4-1.3.4-1.8 0-1.4-1.1-3.1-1.7-5-1.7s-3.6.6-5 1.7c-.5.4-1.3.4-1.8 0-.6-.4-.7-1.2-.1-1.7C6.4 3.2 9.6 2.4 12 2.4zM2.4 12c0-2.4.8-4.6 2.2-6.4.5-.6 1.3-.5 1.7.1.4.5.4 1.3 0 1.8-1.1 1.4-1.7 3.1-1.7 5s.6 3.6 1.7 5c.4.5.4 1.3 0 1.8-.6.6-1.2.7-1.7.1-1.4-1.8-2.2-4-2.2-6.4zM21.6 12c0 2.4-.8 4.6-2.2 6.4-.5.6-1.3.5-1.7-.1-.4-.5-.4-1.3 0-1.8 1.1-1.4 1.7-3.1 1.7-5s-.6-3.6-1.7-5c-.4-.5-.4-1.3 0-1.8.6-.6 1.2-.7 1.7-.1 1.4 1.8 2.2 4 2.2 6.4zM12 6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6 2.7-6 6-6z"/></svg>
+  ),
+  CICD: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M6 9a6 6 0 1 0 12 0A6 6 0 0 0 6 9v8a6 6 0 1 0 12 0A6 6 0 0 0 6 17Z"/><path d="M12 3v18"/></svg>
   )
 };
 
@@ -115,19 +121,24 @@ export const EDUCATION_DATA: Education[] = [
 
 export const SKILLS: Skill[] = [
   // Fullstack & Systems
-  { name: 'Node.js', level: 98, category: 'backend', subcategory: 'NestJS / Express / Hono', years: 5, icon: Icons.Node },
-  { name: 'PHP / Laravel', level: 95, category: 'backend', subcategory: '', years: 10, icon: Icons.Laravel },
+  { name: 'Node.js', level: 98, category: 'backend', subcategory: 'NestJS / Express / Hono', years: 10, icon: Icons.Node },
+  { name: 'PHP / Laravel', level: 95, category: 'backend', subcategory: 'Enterprise Architectures', years: 8, icon: Icons.Laravel },
   
   // Frontend & UI
-  { name: 'React / Next.js', level: 98, category: 'frontend', subcategory: 'Client & Server Side', years: 3, icon: Icons.React },
-  { name: 'Vue / Nuxt', level: 92, category: 'frontend', subcategory: 'Client & Server Side', years: 6, icon: Icons.Vue },
+  { name: 'React / Next.js', level: 98, category: 'frontend', subcategory: 'Server Components & State', years: 9, icon: Icons.React },
+  { name: 'React Native', level: 94, category: 'frontend', subcategory: 'Mobile Cross-Platform', years: 5, icon: Icons.ReactNative },
+  { name: 'Vue / Nuxt', level: 92, category: 'frontend', subcategory: 'Reactive Interfaces', years: 6, icon: Icons.Vue },
   { name: 'Astro', level: 90, category: 'frontend', subcategory: 'Islands Architecture', years: 3, icon: Icons.Astro },
   { name: 'Tailwind CSS', level: 96, category: 'frontend', subcategory: 'Design Systems', years: 6, icon: Icons.Tailwind },
   
   // Data & Infrastructure
   { name: 'SQL (Postgres/MySQL)', level: 94, category: 'backend', subcategory: 'Schema & Optimization', years: 9, icon: Icons.Database },
   { name: 'NoSQL (MongoDB)', level: 90, category: 'backend', subcategory: 'Document Stores', years: 7, icon: Icons.MongoDB },
-  { name: 'Docker', level: 88, category: 'devops', subcategory: 'Containerization', years: 6, icon: Icons.Docker },
+  
+  // DevOps & Cloud
+  { name: 'Docker / K8s', level: 88, category: 'devops', subcategory: 'Containerization', years: 6, icon: Icons.Docker },
+  { name: 'CI/CD Pipelines', level: 92, category: 'devops', subcategory: 'GitHub Actions / CircleCI', years: 6, icon: Icons.CICD },
+  { name: 'AWS / Vercel', level: 88, category: 'devops', subcategory: 'Cloud Architecture', years: 7, icon: Icons.Cloud },
 ];
 
 export const PRINCIPLES: EngineeringPrinciple[] = [

@@ -1,125 +1,36 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { SystemDesignPlayground } from '../../components/react/SystemDesignPlayground';
-import { ChevronLeft, Terminal, Activity, Zap, FlaskConical } from 'lucide-react';
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { LabDetail } from "../../components/react/LabDetail";
+import { SystemDesignPlayground } from "../../components/react/SystemDesignPlayground";
+import { FlaskConical } from "lucide-react";
 
 export async function getStaticPaths() {
-	const labs = await getCollection('labs');
-	return labs.map((lab) => ({
-		params: { slug: lab.slug },
-		props: { lab },
-	}));
+  const labs = await getCollection("labs");
+  return labs.map((lab) => ({
+    params: { slug: lab.slug },
+    props: { lab },
+  }));
 }
 
 const { lab } = Astro.props;
-const { Content } = await render(lab);
 ---
 
 <BaseLayout title={lab.data.title}>
-  <article class="pt-32 pb-24 px-6 min-h-screen">
-      <div class="max-w-7xl mx-auto space-y-12">
-        <div>
-          <a 
-            href="/labs"
-            class="flex items-center gap-2 mb-8 font-bold text-blue-600 hover:text-blue-700 transition-colors"
-          >
-            <ChevronLeft size={16} /> Back to Labs
-          </a>
-        </div>
-        <header class="border-b border-gray-100 dark:border-[#1A1A1A] pb-12">
-           <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
-             <div class="max-w-4xl">
-               <div class="flex items-center gap-4 mb-6">
-                 <span class="px-3 py-1 text-[10px] font-black uppercase mono border border-blue-600 text-blue-600">
-                    {lab.data.type}
-                 </span>
-                 <span class="text-[10px] font-black uppercase mono text-gray-500">
-                    DIFFICULTY: {lab.data.difficulty}
-                 </span>
-               </div>
-               <h1 class="text-5xl md:text-8xl font-black leading-[0.9] text-gray-900 dark:text-white font-sans tracking-tight">
-                 {lab.data.title}
-               </h1>
-             </div>
-             <div class="flex items-center gap-6">
-                <div class="text-right">
-                   <div class="text-[10px] mono font-bold text-gray-400 uppercase mb-1">Telemetry Status</div>
-                   <div class="flex items-center gap-2 justify-end">
-                      <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                      <span class="text-xs font-black mono uppercase dark:text-white">Live_Simulation</span>
-                   </div>
-                </div>
-             </div>
-           </div>
-        </header>
-
-        <div class="p-8 border-l-4 bg-blue-50 dark:bg-blue-900/5 border-blue-600">
-          <div class="flex items-center gap-2 mb-3">
-            <Terminal size={14} class="text-gray-400" />
-            <span class="text-[10px] mono font-bold text-gray-400 uppercase tracking-widest">Architectural_Hypothesis</span>
-          </div>
-          <p class="text-xl md:text-3xl font-light text-gray-700 dark:text-gray-200 italic leading-relaxed">
-            "{lab.data.hypothesis}"
-          </p>
-        </div>
-
-        <section class="relative group">
-          <div class="flex items-center justify-between mb-6 px-2">
-             <div class="flex items-center gap-2">
-                <Activity size={14} class="text-gray-400" />
-                <h4 class="text-sm font-black uppercase tracking-widest text-blue-600 font-sans">
-                    Interactive_Environment
-                </h4>
-             </div>
-             {/* Random Session ID for effect, generated client-side would be better but static is fine for visual */}
-             <div class="text-[10px] mono text-gray-400">SESSION_ID: 0x{Math.floor(Math.random()*16777215).toString(16).toUpperCase()}</div>
-          </div>
-          <div class="min-w-0">
-            {lab.data.component === 'SystemDesignPlayground' ? (
-              <SystemDesignPlayground client:only="react" />
-            ) : (
-              <div class="p-24 border-2 border-dashed border-gray-200 dark:border-gray-800 text-center">
-                 <div class="flex flex-col items-center gap-4">
-                    <FlaskConical size={48} class="text-gray-300" />
-                    <p class="mono text-xs text-gray-500 uppercase tracking-widest">Environment Offline</p>
-                 </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <div class="pt-16 border-t border-gray-100 dark:border-[#1A1A1A]">
-          <div class="grid lg:grid-cols-[1fr_300px] gap-16">
-            <div class="space-y-8">
-               <h3 class="text-2xl font-black uppercase tracking-tight text-gray-900 dark:text-white font-sans">
-                 Experimental_Findings
-               </h3>
-               <div class="grid md:grid-cols-3 gap-8">
-                 {lab.data.findings.map((f, i) => (
-                    <div class="p-6 border transition-all hover:translate-y-1 bg-gray-50 dark:bg-[#121212] border-gray-100 dark:border-[#222] rounded-xl">
-                      <div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black mb-4 bg-blue-600 text-white">
-                        {i + 1}
-                      </div>
-                      <p class="text-sm font-medium text-gray-600 dark:text-gray-300 leading-relaxed">
-                        {f}
-                      </p>
-                    </div>
-                 ))}
-               </div>
-            </div>
-            <aside class="space-y-8">
-              <div>
-                <h4 class="text-[10px] mono text-gray-500 uppercase tracking-widest mb-6 border-b border-gray-100 dark:border-[#1A1A1A] pb-2">Technical_Tags</h4>
-                <div class="flex flex-wrap gap-2">
-                  {lab.data.tags.map(t => (
-                    <span class="px-3 py-1 text-[9px] mono font-black bg-gray-100 dark:bg-[#1A1A1A] border border-gray-200 dark:border-[#222] text-gray-500 uppercase tracking-tighter">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </aside>
+  <LabDetail client:load lab={lab}>
+    {
+      lab.data.component === "SystemDesignPlayground" ? (
+        <SystemDesignPlayground client:only="react" />
+      ) : (
+        <div class="p-24 border-2 border-dashed border-gray-200 dark:border-gray-800 text-center">
+          <div class="flex flex-col items-center gap-4">
+            <FlaskConical size={48} class="text-gray-300" />
+            <p class="mono text-xs text-gray-500 uppercase tracking-widest">
+              Environment Offline
+            </p>
           </div>
         </div>
-      </div>
-  </article>
+      )
+    }
+  </LabDetail>
 </BaseLayout>
