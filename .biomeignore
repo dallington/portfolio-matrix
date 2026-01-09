@@ -1,0 +1,12 @@
+# Ignore build output
+dist/
+.astro/
+node_modules/
+
+# Ignore CSS files because of Tailwind 4 syntax Biome doesn't support yet
+**/*.css
+**/*.scss
+**/*.less
+
+# Ignore Astro files if Biome struggles with them (though Biome 2.0+ supports Astro)
+# **/*.astro

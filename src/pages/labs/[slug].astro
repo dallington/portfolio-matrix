@@ -1,16 +1,16 @@
 ---
-import { getCollection, render } from "astro:content";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { LabDetail } from "../../components/react/LabDetail";
-import { SystemDesignPlayground } from "../../components/react/SystemDesignPlayground";
+import { getCollection } from "astro:content";
+import { LabDetail } from "@components/react/LabDetail";
+import { SystemDesignPlayground } from "@components/react/SystemDesignPlayground";
+import BaseLayout from "@layouts/BaseLayout.astro";
 import { FlaskConical } from "lucide-react";
 
 export async function getStaticPaths() {
-  const labs = await getCollection("labs");
-  return labs.map((lab) => ({
-    params: { slug: lab.slug },
-    props: { lab },
-  }));
+	const labs = await getCollection("labs");
+	return labs.map((lab) => ({
+		params: { slug: lab.slug },
+		props: { lab },
+	}));
 }
 
 const { lab } = Astro.props;

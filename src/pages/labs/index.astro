@@ -1,10 +1,10 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { LabCard } from '../../components/react/LabCard';
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
+import { LabCard } from "@components/react/LabCard";
+import BaseLayout from "@layouts/BaseLayout.astro";
 
-const labs = await getCollection('labs');
-const sortedLabs = labs.map(l => ({id: l.slug, ...l.data}));
+const labs = await getCollection("labs");
+const sortedLabs = labs.map((l) => ({ id: l.slug, ...l.data }));
 ---
 
 <BaseLayout title="Labs | Dallington">

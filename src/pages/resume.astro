@@ -1,38 +1,28 @@
 ---
 import { getCollection } from "astro:content";
-import {
-  PROFESSIONAL_EXPERIENCE,
-  EDUCATION_DATA,
-  RESUME_SUMMARY,
-  SKILLS,
+import { 
+    SKILLS, 
+    RESUME_SUMMARY, 
+    PROFESSIONAL_EXPERIENCE, 
+    EDUCATION_DATA 
 } from "../data";
-import {
-  MapPin,
-  Briefcase,
-  Globe,
-  Linkedin,
-  Github,
-  Mail,
-  Download,
-  Award,
-} from "lucide-react";
 
 const projects = await getCollection("projects");
 const RESUME_PROJECTS = projects.slice(0, 2).map((p) => ({
-  id: p.slug,
-  title: p.data.title,
-  impact: p.data.impact,
-  description: p.data.description || "",
-  tags: p.data.tags,
+	id: p.slug,
+	title: p.data.title,
+	impact: p.data.impact,
+	description: p.data.description || "",
+	tags: p.data.tags,
 }));
 
 const groupedSkills = SKILLS.reduce(
-  (acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill.name);
-    return acc;
-  },
-  {} as Record<string, string[]>,
+	(acc, skill) => {
+		if (!acc[skill.category]) acc[skill.category] = [];
+		acc[skill.category].push(skill.name);
+		return acc;
+	},
+	{} as Record<string, string[]>,
 );
 ---
 

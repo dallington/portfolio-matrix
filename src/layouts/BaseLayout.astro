@@ -1,12 +1,12 @@
 ---
+import { getCollection } from "astro:content";
+import "../styles/global.css";
 import { Header } from "../components/react/Header";
 import { CustomCursor } from "../components/react/CustomCursor";
 import { CommandPalette } from "../components/react/CommandPalette";
-import { getCollection } from "astro:content";
-import "../styles/global.css";
 
 interface Props {
-  title: string;
+	title: string;
 }
 
 const { title } = Astro.props;
@@ -17,21 +17,20 @@ const posts = await getCollection("posts");
 const labs = await getCollection("labs");
 
 const projectData = projects.map((p) => ({
-  id: p.slug,
-  ...p.data,
-  codeSnippet: p.data.codeSnippet || "",
+	id: p.slug,
+	...p.data,
+	codeSnippet: p.data.codeSnippet || "",
 }));
 
 const postData = posts.map((p) => ({
-  id: p.slug,
-  ...p.data,
-  codeSnippet: p.data.codeSnippet || "",
+	id: p.slug,
+	...p.data,
 }));
 
 const labData = labs.map((l) => ({
-  id: l.slug,
-  ...l.data,
-  codeSnippet: "", // Labs don't have codeSnippet in schema, defaulting to empty string
+	id: l.slug,
+	...l.data,
+	codeSnippet: "", // Labs don't have codeSnippet in schema, defaulting to empty string
 }));
 // Wait, labData mapping in 485 was:
 // const labData = labs.map((l) => ({

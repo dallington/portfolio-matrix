@@ -1,7 +1,7 @@
 ---
+import { BlogLayout } from "@components/react/BlogLayout";
+import BaseLayout from "@layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-import { BlogLayout } from "../../components/react/BlogLayout";
-import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
 	const posts = await getCollection("posts");

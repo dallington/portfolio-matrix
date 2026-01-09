@@ -1,26 +1,26 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { Hero } from "../components/react/Hero";
 import { ProjectShowcase } from "../components/react/ProjectShowcase";
 import { TechnicalDNA } from "../components/react/TechnicalDNA";
-import { PRINCIPLES } from "../data";
 import { BlogPreview } from "../components/react/BlogPreview";
 import { ContactCTA } from "../components/react/ContactCTA";
-import { getCollection } from "astro:content";
+import { PRINCIPLES } from "../data";
 
 const projects = await getCollection("projects");
 const posts = await getCollection("posts");
 
 const latestPosts = posts
-  .sort(
-    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
-  )
-  .slice(0, 3);
+	.sort(
+		(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+	)
+	.slice(0, 3);
 // Filter or sort projects if needed
 const showcaseProjects = projects.map((p) => ({
-  id: p.slug,
-  ...p.data,
-  codeSnippet: p.data.codeSnippet || "",
+	id: p.slug,
+	...p.data,
+	codeSnippet: p.data.codeSnippet || "",
 }));
 ---
 

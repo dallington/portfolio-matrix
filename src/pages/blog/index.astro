@@ -1,11 +1,14 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { PostListItem } from '../../components/react/PostListItem';
-import { getCollection } from 'astro:content';
-import { Search } from 'lucide-react';
+import { getCollection } from "astro:content";
+import { PostListItem } from "../../components/react/PostListItem";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const posts = await getCollection('posts');
-const sortedPosts = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()).map(p => ({id: p.slug, ...p.data}));
+const posts = await getCollection("posts");
+const sortedPosts = posts
+	.sort(
+		(a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+	)
+	.map((p) => ({ id: p.slug, ...p.data }));
 ---
 
 <BaseLayout title="Blog | Dallington">

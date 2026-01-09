@@ -1,37 +1,28 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { 
-  User, 
-  Target, 
-  History, 
-  Heart, 
-  ChevronRight, 
-  Terminal, 
-  ShieldCheck, 
-  Zap,
-  Coffee,
-  Globe
-} from 'lucide-react';
+    User, 
+    Target, 
+    History, 
+    ShieldCheck, 
+    Terminal, 
+    Heart, 
+    Zap, 
+    Globe, 
+    Coffee, 
+    ChevronRight 
+} from "lucide-react";
 
-const isDev = false; // Default to prod (clean) look for static page, or could be dynamic with React island if interactive. 
-// However, the original AboutPage uses `useMode`. To keep it fully interactive (switchable), 
-// we should wrap it in a React island or replicate the logic with Astro script or just default to one mode.
-// Given it's a content page, pure Astro with a clean default is often best, but users might expect consistency.
-// The user asked for "minimal JavaScript". 
-// I'll make it static Astro HTML with Recruiter Mode (clean) style by default, 
-// but perhaps allowing a "Dev Mode" toggle via React island would be overkill if the whole page is static.
-// Actually, `BaseLayout` has the toggles. But the content styling relies on `isDev`.
-// Since `isDev` is global state, if we want this page to react to it, it MUST be a React Island entirely, OR we use CSS variables/classes toggled on <body>.
-// Current implementation uses `useStore` in React components. Astro pages are static.
-// If I want the *entire page content* to change style based on mode, I have two options:
+const _isDev = false;
+---
 // 1. Make the whole content a React Island (client:load).
 // 2. Use CSS variables for everything (harder to refactor effectively).
 // 3. Just assume "Visual/Recruiter" mode for the static pages (Resume/About) as they are "official" documents.
 // Resume is definitely static. About page... likely static too.
 // "Resume page must be pure Astro". About wasn't specified but likely same bucket.
-// I will build it as a static Astro page using the "Recruiter/Clean" style (Standard, not Dev/Cyberpunk). 
+// I will build it as a static Astro page using the "Recruiter/Clean" style (Standard, not Dev/Cyberpunk).
 // This fits the "minimal JS" goal.
----
+
 
 <BaseLayout title="About | Dallington">
     <article class="pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-500">
