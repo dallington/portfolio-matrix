@@ -1,6 +1,10 @@
 import { ChevronLeft, Target } from "lucide-react";
 import type React from "react";
 import { useMode } from "../../hooks/useMode";
+import { useStore } from "@nanostores/react";
+import { isFocus } from "@/store";
+import { FocusToggle } from "./FocusToggle";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Metric {
 	label: string;
@@ -35,6 +39,7 @@ interface ProjectDetailProps {
 
 export const ProjectDetail = ({ project, children }: ProjectDetailProps) => {
 	const { isDev } = useMode();
+	const $isFocus = useStore(isFocus);
 	const {
 		title,
 		impact,
@@ -53,80 +58,96 @@ export const ProjectDetail = ({ project, children }: ProjectDetailProps) => {
 		: "bg-blue-50 dark:bg-blue-900/10";
 
 	return (
-		<article className="pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-500">
-			<div className="max-w-6xl mx-auto">
-				<a
-					href="/"
-					className={`flex items-center gap-2 mb-12 font-bold transition-all ${isDev ? "mono text-xs text-[var(--accent)] hover:-translate-x-2" : "font-sans text-blue-600 hover:text-blue-700"}`}
-				>
-					<ChevronLeft size={16} />{" "}
-					{isDev ? "BACK_TO_REPO_LIST" : "Back to Projects"}
-				</a>
+		<article className={`pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-1000 ${$isFocus ? 'pt-20' : ''}`}>
+			<FocusToggle />
+			<motion.div layout className={`max-w-6xl mx-auto ${$isFocus ? 'max-w-3xl' : ''}`}>
+				{!$isFocus && (
+					<a
+						href="/"
+						className={`flex items-center gap-2 mb-12 font-bold transition-all ${isDev ? "mono text-xs text-[var(--accent)] hover:-translate-x-2" : "font-sans text-blue-600 hover:text-blue-700"}`}
+					>
+						<ChevronLeft size={16} />{" "}
+						{isDev ? "BACK_TO_REPO_LIST" : "Back to Projects"}
+					</a>
+				)}
 
-				<header className="mb-32">
-					<div className="flex flex-wrap gap-2 mb-10">
-						{tags.map((tag) => (
-							<span
-								key={tag}
-								className={`text-[10px] px-3 py-1 border uppercase tracking-widest font-black ${isDev ? "mono border-[var(--accent)]/30 text-[var(--accent)]" : "border-gray-200 dark:border-[#333] text-gray-500"}`}
-							>
-								#{tag}
-							</span>
-						))}
-					</div>
+				<header className={`transition-all duration-1000 ${$isFocus ? 'mb-20' : 'mb-32'}`}>
+					{!$isFocus && (
+						<div className="flex flex-wrap gap-2 mb-10">
+							{tags.map((tag) => (
+								<span
+									key={tag}
+									className={`text-[10px] px-3 py-1 border uppercase tracking-widest font-black ${isDev ? "mono border-[var(--accent)]/30 text-[var(--accent)]" : "border-gray-200 dark:border-[#333] text-gray-500"}`}
+								>
+									#{tag}
+								</span>
+							))}
+						</div>
+					)}
 					<h1
-						className={`text-6xl md:text-[8rem] font-black text-gray-900 dark:text-white mb-12 leading-[0.85] tracking-tight ${isDev ? "mono uppercase" : "font-sans"}`}
+						className={`text-6xl md:text-[8rem] font-black text-gray-900 dark:text-white mb-12 leading-[0.85] tracking-tight transition-all duration-1000 ${$isFocus ? 'text-5xl md:text-7xl mb-8' : ''} ${isDev ? "mono uppercase" : "font-sans"}`}
 					>
 						{isDev ? title.toUpperCase().replace(/\s+/g, "_") : title}
 					</h1>
-					<div className={`p-12 border-l-8 ${accentBg} ${accentBorder}`}>
-						<p
-							className={`text-2xl md:text-5xl font-light italic leading-tight ${accentColor}`}
-						>
-							"{impact}"
-						</p>
-					</div>
+					{!$isFocus && (
+						<div className={`p-12 border-l-8 ${accentBg} ${accentBorder}`}>
+							<p
+								className={`text-2xl md:text-5xl font-light italic leading-tight ${accentColor}`}
+							>
+								"{impact}"
+							</p>
+						</div>
+					)}
 				</header>
 
-				<div className="space-y-40">
-					<div className="grid lg:grid-cols-[1fr_350px] gap-16 items-start">
-						<div
-							className={`prose prose-2xl dark:prose-invert max-w-none ${isDev ? "font-mono" : "font-sans"}`}
+				<div className={`space-y-40 transition-all duration-700 ${$isFocus ? 'space-y-20' : ''}`}>
+					<motion.div layout className={`grid transition-all duration-700 ${$isFocus ? 'grid-cols-1' : 'lg:grid-cols-[1fr_350px] gap-16 items-start'}`}>
+						<motion.div
+							layout
+							className={`prose prose-2xl dark:prose-invert max-w-none transition-all duration-1000 ${$isFocus ? 'prose-xl' : ''} ${isDev ? "font-mono" : "font-sans"}`}
 						>
 							<p className="text-gray-600 dark:text-gray-400 font-light leading-relaxed mb-12">
 								{problem}
 							</p>
 							{children}
-						</div>
+						</motion.div>
 
-						<div
-							className={`p-8 border rounded-3xl ${isDev ? "bg-black border-[var(--accent)]/20" : "bg-slate-50 dark:bg-slate-900 border-gray-100 dark:border-[#222]"}`}
-						>
-							<div
-								className={`text-[10px] font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDev ? "text-[var(--accent)]" : "text-red-500"}`}
-							>
-								<Target size={14} />{" "}
-								{isDev ? "PERFORMANCE_TELEMETRY" : "Key Metrics"}
-							</div>
-							<div className="space-y-6">
-								{metrics.map((m) => (
+						<AnimatePresence mode="popLayout">
+							{!$isFocus && (
+								<motion.div
+									initial={{ opacity: 0, x: 20 }}
+									animate={{ opacity: 1, x: 0 }}
+									exit={{ opacity: 0, x: 20, transition: { duration: 0.3 } }}
+									className={`p-8 border rounded-3xl ${isDev ? "bg-black border-[var(--accent)]/20" : "bg-slate-50 dark:bg-slate-900 border-gray-100 dark:border-[#222]"}`}
+									style={{ gridColumn: $isFocus ? 1 : 2, gridRow: 1 }}
+								>
 									<div
-										key={m.label}
-										className={`pb-4 last:border-0 border-b ${isDev ? "border-[var(--accent)]/10" : "border-gray-100 dark:border-gray-800"}`}
+										className={`text-[10px] font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDev ? "text-[var(--accent)]" : "text-red-500"}`}
 									>
-										<div className="text-[10px] mono text-gray-500 uppercase">
-											{m.label}
-										</div>
-										<div className={`text-3xl font-black ${accentColor}`}>
-											{m.value}
-										</div>
+										<Target size={14} />{" "}
+										{isDev ? "PERFORMANCE_TELEMETRY" : "Key Metrics"}
 									</div>
-								))}
-							</div>
-						</div>
-					</div>
+									<div className="space-y-6">
+										{metrics.map((m) => (
+											<div
+												key={m.label}
+												className={`pb-4 last:border-0 border-b ${isDev ? "border-[var(--accent)]/10" : "border-gray-100 dark:border-gray-800"}`}
+											>
+												<div className="text-[10px] mono text-gray-500 uppercase">
+													{m.label}
+												</div>
+												<div className={`text-3xl font-black ${accentColor}`}>
+													{m.value}
+												</div>
+											</div>
+										))}
+									</div>
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</motion.div>
 
-					{challengesList && (
+					{!$isFocus && challengesList && (
 						<section>
 							<div className="flex items-center gap-4 mb-8">
 								<div
@@ -181,7 +202,7 @@ export const ProjectDetail = ({ project, children }: ProjectDetailProps) => {
 						</section>
 					)}
 
-					{projectLayout === "complete" && codeSnippet && (
+					{!$isFocus && projectLayout === "complete" && codeSnippet && (
 						<section>
 							<div
 								className={`p-12 border text-sm overflow-x-auto shadow-2xl relative group rounded-[2rem] ${isDev ? "border-[var(--accent)]/30 bg-black mono" : "bg-gray-950 border-gray-800"}`}
@@ -196,7 +217,7 @@ export const ProjectDetail = ({ project, children }: ProjectDetailProps) => {
 						</section>
 					)}
 				</div>
-			</div>
+			</motion.div>
 		</article>
 	);
 };

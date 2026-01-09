@@ -13,6 +13,7 @@ const getInitialMode = (): Mode => {
 
 export const mode = atom<Mode>(getInitialMode());
 export const isPaletteOpen = atom(false);
+export const isFocus = atom(false);
 
 export const toggleMode = () => {
 	const current = mode.get();
@@ -21,6 +22,10 @@ export const toggleMode = () => {
 	if (typeof localStorage !== "undefined") {
 		localStorage.setItem("app_mode", next);
 	}
+};
+
+export const toggleFocus = () => {
+	isFocus.set(!isFocus.get());
 };
 
 export const setPaletteOpen = (isOpen: boolean) => {

@@ -1,11 +1,14 @@
 import { Menu, Monitor, Moon, Search, Sun, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMode } from "../../hooks/useMode";
-import { setPaletteOpen } from "../../store";
+import { isFocus, setPaletteOpen } from "../../store";
+import { useStore } from "@nanostores/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Header = () => {
 	const [isDark, setIsDark] = useState(true);
 	const { isDev, toggleMode } = useMode();
+	const $isFocus = useStore(isFocus);
 
 	useEffect(() => {
 		setIsDark(document.documentElement.classList.contains("dark"));
@@ -26,9 +29,15 @@ export const Header = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	return (
-		<header
-			className={`fixed top-0 left-0 w-full z-50 border-b transition-colors duration-500 ${isDev ? "border-gray-200 dark:border-[#1A1A1A] bg-white/80 dark:bg-[#0A0A0A]/80" : "border-gray-100 dark:border-[#1A1A1A] bg-white/95 dark:bg-[#0A0A0A]/95"} backdrop-blur-md px-6 py-4`}
-		>
+		<AnimatePresence>
+			{!$isFocus && (
+				<motion.header
+					initial={{ y: -100 }}
+					animate={{ y: 0 }}
+					exit={{ y: -100 }}
+					transition={{ duration: 0.5, ease: "easeInOut" }}
+					className={`fixed top-0 left-0 w-full z-50 border-b transition-colors duration-500 ${isDev ? "border-gray-200 dark:border-[#1A1A1A] bg-white/80 dark:bg-[#0A0A0A]/80" : "border-gray-100 dark:border-[#1A1A1A] bg-white/95 dark:bg-[#0A0A0A]/95"} backdrop-blur-md px-6 py-4`}
+				>
 			<div className="max-w-7xl mx-auto flex justify-between items-center">
 				<a
 					href="/"
@@ -173,6 +182,8 @@ export const Header = () => {
 					</a>
 				</nav>
 			</div>
-		</header>
+				</motion.header>
+			)}
+		</AnimatePresence>
 	);
 };

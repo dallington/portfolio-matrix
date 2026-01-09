@@ -1,8 +1,11 @@
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { Calendar, ChevronLeft, Clock, List } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useMode } from "../../hooks/useMode";
 import { CoffeeReaction } from "./CoffeeReaction";
+import { useStore } from "@nanostores/react";
+import { isFocus } from "../../store";
+import { FocusToggle } from "./FocusToggle";
 
 // Define types locally if not imported
 interface BlogPost {
@@ -25,6 +28,7 @@ interface BlogLayoutProps {
 
 export const BlogLayout = ({ post, onBack, previewMode = false }: BlogLayoutProps) => {
 	const { isDev } = useMode();
+	const $isFocus = useStore(isFocus);
 	const { scrollYProgress } = useScroll();
 	// Using generic motion div for line progress, simplify spring usage or just use raw scrollYProgress if spring causes issues in strict mode
 	// The user code used useSpring from framer-motion? No, framer-motion has useSpring too, but usually it returns a motion value.
@@ -130,14 +134,18 @@ export const BlogLayout = ({ post, onBack, previewMode = false }: BlogLayoutProp
 	};
 
 	return (
-		<article className="pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-500">
+		<article className={`pt-32 pb-24 px-6 min-h-screen bg-white dark:bg-[#0A0A0A] transition-colors duration-1000 ${$isFocus ? 'pt-20' : ''}`}>
+			<FocusToggle />
 			<motion.div
 				className="fixed top-0 left-0 right-0 h-1 bg-[var(--accent)] z-[60] origin-left"
 				style={{ scaleX }}
 			/>
-			<div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_300px] gap-16">
+			<motion.div 
+				layout
+				className={`max-w-7xl mx-auto grid transition-all duration-700 ${$isFocus ? 'max-w-3xl grid-cols-1' : 'lg:grid-cols-[1fr_300px] gap-16'}`}
+			>
 				
-				<div className="min-w-0">
+				<motion.div layout className="min-w-0">
 					{ !previewMode && (
 						<button
 							onClick={handleBack}
@@ -249,9 +257,17 @@ export const BlogLayout = ({ post, onBack, previewMode = false }: BlogLayoutProp
 							);
 						})}
 					</div>
-				</div>
+				</motion.div>
 
-				<aside className="hidden lg:block space-y-8">
+				<AnimatePresence mode="popLayout">
+					{!$isFocus && (
+						<motion.aside
+							initial={{ opacity: 0, x: 20 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: 20, transition: { duration: 0.3 } }}
+							className="hidden lg:block space-y-8"
+							style={{ gridColumn: $isFocus ? 1 : 2, gridRow: 1 }}
+						>
 					<div
 						className={`p-6 border transition-colors rounded-xl ${isDev ? "bg-black text-[var(--accent)] border-[var(--accent)]/30 mono" : "bg-gray-50 dark:bg-[#111] dark:border-[#222]"}`}
 					>
@@ -301,8 +317,10 @@ export const BlogLayout = ({ post, onBack, previewMode = false }: BlogLayoutProp
 							/>
 						</div>
 					)}
-				</aside>
-			</div>
+						</motion.aside>
+					)}
+				</AnimatePresence>
+			</motion.div>
 		</article>
 	);
 };
