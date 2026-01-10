@@ -1,0 +1,11 @@
+node_modules
+.astro
+dist
+.vscode
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+biome.json
+.biomeignore
