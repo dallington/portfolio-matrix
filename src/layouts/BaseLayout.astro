@@ -30,18 +30,16 @@ const postData = posts.map((p) => ({
 const labData = labs.map((l) => ({
 	id: l.slug,
 	...l.data,
-	codeSnippet: "", // Labs don't have codeSnippet in schema, defaulting to empty string
 }));
-// Wait, labData mapping in 485 was:
-// const labData = labs.map((l) => ({
-//   id: l.slug,
-//   ...l.data,
-// }));
-// I should stick to that to avoid errors. The previous file didn't mapped codeSnippet for labs.
+
+const mode = Astro.cookies.get("app_mode")?.value || "dev";
+const theme = Astro.cookies.get("theme")?.value || "dark";
+const isRecruiter = mode === "recruiter";
+const accentColor = isRecruiter ? "#2563eb" : "#00FF88";
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class:list={["scroll-smooth", { "dark": theme === "dark", "recruiter-mode": isRecruiter }]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Dallington Portfolio" />
@@ -49,9 +47,9 @@ const labData = labs.map((l) => ({
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <style is:global>
+    <style is:global define:vars={{ accent: accentColor }}>
       :root {
-        --accent: #00ff88;
+        --accent: var(--accent);
       }
       .mono {
         font-family: "JetBrains Mono", "Fira Code", "Roboto Mono", monospace;
@@ -69,34 +67,6 @@ const labData = labs.map((l) => ({
         scrollbar-width: none; /* Firefox */
       }
     </style>
-    <script is:inline>
-      // Immediate execution to prevent FOUC
-      (function () {
-        // 1. Restore Mode (Dev vs Recruiter)
-        const savedMode = localStorage.getItem("app_mode") || "dev";
-        const root = document.documentElement;
-
-        if (savedMode === "dev") {
-          root.style.setProperty("--accent", "#00FF88");
-          root.classList.remove("recruiter-mode");
-        } else {
-          root.style.setProperty("--accent", "#2563eb");
-          root.classList.add("recruiter-mode");
-        }
-
-        // 2. Restore Theme (Dark vs Light)
-        const savedTheme = localStorage.getItem("theme");
-        const systemDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
-
-        if (savedTheme === "dark" || (!savedTheme && systemDark)) {
-          root.classList.add("dark");
-        } else {
-          root.classList.remove("dark");
-        }
-      })();
-    </script>
     <script>
       import { mode } from "../store";
 

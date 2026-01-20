@@ -4,29 +4,26 @@ import { useMode } from "../../hooks/useMode";
 import { isFocus, setPaletteOpen } from "../../store";
 import { useStore } from "@nanostores/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { setCookie } from "../../utils/cookies";
 
 export const Header = () => {
 	const [isDark, setIsDark] = useState(true);
-	const [mounted, setMounted] = useState(false);
 	const { isDev, toggleMode } = useMode();
 	const $isFocus = useStore(isFocus);
 
 	useEffect(() => {
 		setIsDark(document.documentElement.classList.contains("dark"));
-		setMounted(true);
 	}, []);
-
-	const effectiveIsDev = mounted ? isDev : true;
 
 	const toggleTheme = () => {
 		const nextValue = !isDark;
 		setIsDark(nextValue);
 		if (nextValue) {
 			document.documentElement.classList.add("dark");
-			localStorage.setItem("theme", "dark");
+			setCookie("theme", "dark");
 		} else {
 			document.documentElement.classList.remove("dark");
-			localStorage.setItem("theme", "light");
+			setCookie("theme", "light");
 		}
 	};
 
@@ -40,7 +37,7 @@ export const Header = () => {
 					animate={{ y: 0 }}
 					exit={{ y: -100 }}
 					transition={{ duration: 0.5, ease: "easeInOut" }}
-					className={`fixed top-0 left-0 w-full z-50 border-b transition-colors duration-500 ${effectiveIsDev ? "border-gray-200 dark:border-[#1A1A1A] bg-white/80 dark:bg-[#0A0A0A]/80" : "border-gray-100 dark:border-[#1A1A1A] bg-white/95 dark:bg-[#0A0A0A]/95"} backdrop-blur-md px-6 py-4`}
+					className={`fixed top-0 left-0 w-full z-50 border-b transition-colors duration-500 ${isDev ? "border-gray-200 dark:border-[#1A1A1A] bg-white/80 dark:bg-[#0A0A0A]/80" : "border-gray-100 dark:border-[#1A1A1A] bg-white/95 dark:bg-[#0A0A0A]/95"} backdrop-blur-md px-6 py-4`}
 				>
 			<div className="max-w-7xl mx-auto flex justify-between items-center">
 				<a
@@ -48,7 +45,7 @@ export const Header = () => {
 					className="flex items-center gap-2 cursor-pointer z-50 relative"
 				>
 					<div
-						className={`w-10 h-10 rounded-sm p-1 flex items-center justify-center font-bold text-black transition-colors ${effectiveIsDev ? "bg-[var(--accent)] mono" : "bg-blue-600 text-white font-sans"}`}
+						className={`w-10 h-10 rounded-sm p-1 flex items-center justify-center font-bold text-black transition-colors ${isDev ? "bg-[var(--accent)] mono" : "bg-blue-600 text-white font-sans"}`}
 					>
 						<svg width="35" height="15" viewBox="0 0 35 15" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M33.3656 6.97375L22.2523 1.13913V2.4309C22.2521 2.57599 22.2917 2.71836 22.3668 2.84249C22.4419 2.96662 22.5497 3.06776 22.6783 3.13488L32.1285 7.97391V8.02631L23.0588 12.6534L18.1172 2.81593C18.0548 2.68721 17.9578 2.57837 17.8372 2.50153C17.7165 2.4247 17.5768 2.38289 17.4338 2.38078C17.3989 2.37844 17.3639 2.37844 17.329 2.38078C17.2948 2.37844 17.2606 2.37844 17.2264 2.38078C17.0833 2.38263 16.9436 2.42433 16.8228 2.50119C16.7021 2.57806 16.6052 2.68705 16.543 2.81593L11.5878 12.6534L2.51573 8.01491V7.97391L11.9659 3.12805C12.0949 3.06133 12.2029 2.96028 12.2781 2.83606C12.3533 2.71184 12.3927 2.56926 12.392 2.42407V1.13913L1.27863 6.97375C1.09538 7.07245 0.942261 7.21891 0.835535 7.39761C0.728808 7.57631 0.672455 7.78057 0.672455 7.98871C0.672455 8.19686 0.728808 8.40112 0.835535 8.57982C0.942261 8.75852 1.09538 8.90498 1.27863 9.00368L11.2665 14.2437C11.4194 14.325 11.5957 14.3508 11.7655 14.3166V14.353C11.9722 14.3518 12.1745 14.2933 12.3499 14.1839C12.5253 14.0744 12.6668 13.9185 12.7588 13.7333L17.3153 4.69549L21.8718 13.7333C21.965 13.9204 22.1088 14.0776 22.2867 14.1871C22.4647 14.2966 22.6698 14.3541 22.8788 14.353V14.3371C23.0478 14.3714 23.2235 14.3456 23.3755 14.2642L33.3634 9.02418C33.5472 8.92602 33.701 8.77974 33.8082 8.60097C33.9154 8.42221 33.9721 8.21767 33.9721 8.00922C33.9721 7.80077 33.9154 7.59623 33.8082 7.41746C33.701 7.2387 33.5472 7.09242 33.3634 6.99425L33.3656 6.97375Z" fill="black"/>
@@ -57,43 +54,43 @@ export const Header = () => {
 
 					</div>
 					<span
-						className={`font-bold tracking-tighter hidden sm:block text-gray-900 dark:text-white ${effectiveIsDev ? "mono" : "font-sans tracking-normal"}`}
+						className={`font-bold tracking-tighter hidden sm:block text-gray-900 dark:text-white ${isDev ? "mono" : "font-sans tracking-normal"}`}
 					>
-						{effectiveIsDev ? "DALLINGTON_" : "Dallington"}
+						{isDev ? "DALLINGTON_" : "Dallington"}
 					</span>
 				</a>
 
 				<div className="flex items-center gap-4 md:gap-8 z-50 relative">
 					<nav
-						className={`hidden md:flex gap-6 text-sm font-medium ${effectiveIsDev ? "mono text-gray-600 dark:text-gray-400" : "font-sans text-gray-500"}`}
+						className={`hidden md:flex gap-6 text-sm font-medium ${isDev ? "mono text-gray-600 dark:text-gray-400" : "font-sans text-gray-500"}`}
 					>
 						<a
 							href="/projects"
-							className={`hover:text-[var(--accent)] transition-colors ${!effectiveIsDev && "hover:text-blue-600"}`}
+							className={`hover:text-[var(--accent)] transition-colors ${!isDev && "hover:text-blue-600"}`}
 						>
 							WORK
 						</a>
 						<a
 							href="/labs"
-							className={`hover:text-[var(--accent)] transition-colors ${!effectiveIsDev && "hover:text-blue-600"}`}
+							className={`hover:text-[var(--accent)] transition-colors ${!isDev && "hover:text-blue-600"}`}
 						>
 							LAB
 						</a>
 						<a
 							href="/resume"
-							className={`hover:text-[var(--accent)] transition-colors ${!effectiveIsDev && "hover:text-blue-600"}`}
+							className={`hover:text-[var(--accent)] transition-colors ${!isDev && "hover:text-blue-600"}`}
 						>
 							RESUME
 						</a>
 						<a
 							href="/about"
-							className={`hover:text-[var(--accent)] transition-colors ${!effectiveIsDev && "hover:text-blue-600"}`}
+							className={`hover:text-[var(--accent)] transition-colors ${!isDev && "hover:text-blue-600"}`}
 						>
 							ABOUT
 						</a>
 						<a
 							href="/blog"
-							className={`hover:text-[var(--accent)] transition-colors ${!effectiveIsDev && "hover:text-blue-600"}`}
+							className={`hover:text-[var(--accent)] transition-colors ${!isDev && "hover:text-blue-600"}`}
 						>
 							BLOG
 						</a>
@@ -103,7 +100,7 @@ export const Header = () => {
 						<button
 							onClick={() => setPaletteOpen(true)}
 							className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
-								effectiveIsDev
+								isDev
 									? "border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/10"
 									: "border-gray-200 dark:border-[#333] text-gray-400 hover:text-gray-900 dark:hover:text-white"
 							}`}
@@ -114,12 +111,12 @@ export const Header = () => {
 
 						<button
 							onClick={toggleMode}
-							className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black transition-all ${effectiveIsDev ? "bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20" : "bg-blue-600 text-white"}`}
-							title={effectiveIsDev ? "Switch to Recruiter Mode" : "Switch to Dev Mode"}
+							className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black transition-all ${isDev ? "bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20" : "bg-blue-600 text-white"}`}
+							title={isDev ? "Switch to Recruiter Mode" : "Switch to Dev Mode"}
 						>
-							{effectiveIsDev ? <Monitor size={14} /> : <User size={14} />}
+							{isDev ? <Monitor size={14} /> : <User size={14} />}
 							<span className="inline">
-								{effectiveIsDev ? "DEV_MODE_ON" : "RECRUITER"}
+								{isDev ? "DEV_MODE_ON" : "RECRUITER"}
 							</span>
 						</button>
 
@@ -151,40 +148,40 @@ export const Header = () => {
 				style={{ top: "0px", height: "100vh", paddingTop: "80px" }}
 			>
 				<nav
-					className={`flex flex-col items-center gap-8 text-2xl font-bold ${effectiveIsDev ? "mono" : "font-sans"}`}
+					className={`flex flex-col items-center gap-8 text-2xl font-bold ${isDev ? "mono" : "font-sans"}`}
 				>
 					<a
 						href="/#work"
 						onClick={() => setIsMenuOpen(false)}
-						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!effectiveIsDev && "hover:text-blue-600"}`}
+						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!isDev && "hover:text-blue-600"}`}
 					>
 						WORK
 					</a>
 					<a
 						href="/labs"
 						onClick={() => setIsMenuOpen(false)}
-						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!effectiveIsDev && "hover:text-blue-600"}`}
+						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!isDev && "hover:text-blue-600"}`}
 					>
 						LAB
 					</a>
 					<a
 						href="/resume"
 						onClick={() => setIsMenuOpen(false)}
-						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!effectiveIsDev && "hover:text-blue-600"}`}
+						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!isDev && "hover:text-blue-600"}`}
 					>
 						RESUME
 					</a>
 					<a
 						href="/about"
 						onClick={() => setIsMenuOpen(false)}
-						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!effectiveIsDev && "hover:text-blue-600"}`}
+						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!isDev && "hover:text-blue-600"}`}
 					>
 						ABOUT
 					</a>
 					<a
 						href="/blog"
 						onClick={() => setIsMenuOpen(false)}
-						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!effectiveIsDev && "hover:text-blue-600"}`}
+						className={`hover:text-[var(--accent)] transition-colors text-gray-900 dark:text-white ${!isDev && "hover:text-blue-600"}`}
 					>
 						BLOG
 					</a>
