@@ -7,26 +7,9 @@ import { AdminGuard } from "../../components/react/AdminGuard";
 <BaseLayout title="Admin Editor | Dallington">
 	<main class="relative z-10">
 		<AdminGuard client:load>
-			<AdminEditor client:load />
+			<AdminEditor client:only="react" />
 		</AdminGuard>
 	</main>
 </BaseLayout>
 
-<script is:inline>
-	// Simple client-side "security" for a private page
-	// In a real app, this would be server-side auth
-	const checkAuth = () => {
-		const isAuth = localStorage.getItem("admin_auth");
-		if (!isAuth) {
-			const pass = prompt("Enter access code:");
-			if (pass === "dev") { // Simple placeholder code
-				localStorage.setItem("admin_auth", "true");
-			} else {
-				window.location.href = "/";
-			}
-		}
-	};
-	
-	// Uncomment to enable simple auth
-	// checkAuth();
-</script>
+

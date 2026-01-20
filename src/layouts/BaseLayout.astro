@@ -84,7 +84,11 @@ const accentColor = isRecruiter ? "#2563eb" : "#00FF88";
     </script>
   </head>
   <body class="bg-white dark:bg-[#0A0A0A] transition-colors duration-500">
-    <Header client:load />
+    <Header 
+      client:load 
+      initialMode={mode as "dev" | "recruiter"} 
+      initialTheme={theme as "light" | "dark"} 
+    />
     <CustomCursor client:load />
     <CommandPalette
       client:load

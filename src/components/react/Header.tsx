@@ -1,17 +1,30 @@
 import { Menu, Monitor, Moon, Search, Sun, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMode } from "../../hooks/useMode";
-import { isFocus, setPaletteOpen } from "../../store";
+import { type Mode, isFocus, setPaletteOpen } from "../../store";
 import { useStore } from "@nanostores/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { setCookie } from "../../utils/cookies";
 
-export const Header = () => {
-	const [isDark, setIsDark] = useState(true);
-	const { isDev, toggleMode } = useMode();
+interface HeaderProps {
+	initialMode?: Mode;
+	initialTheme?: "light" | "dark";
+}
+
+export const Header = ({ initialMode, initialTheme }: HeaderProps) => {
+	const [isDark, setIsDark] = useState(initialTheme === "dark" || !initialTheme);
+	const { mode: storeMode, toggleMode } = useMode();
+	const [currentMode, setCurrentMode] = useState<Mode>(initialMode || storeMode);
 	const $isFocus = useStore(isFocus);
 
+	const isDev = currentMode === "dev";
+
 	useEffect(() => {
+		setCurrentMode(storeMode);
+	}, [storeMode]);
+
+	useEffect(() => {
+		// Sync theme state with actual DOM on mount/update just in case
 		setIsDark(document.documentElement.classList.contains("dark"));
 	}, []);
 

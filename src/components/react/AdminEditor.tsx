@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { BlogLayout } from './BlogLayout';
 import { Copy, Eye, Edit3, CheckCircle2 } from 'lucide-react';
-import { clsx } from 'clsx';
 import { useMode } from '../../hooks/useMode';
 
 export const AdminEditor = () => {
@@ -50,7 +49,9 @@ tags: [${tags.split(',').map(t => `"${t.trim()}"`).filter(t => t !== '""').join(
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                     <div>
-                        <h1 className={clsx("text-4xl font-black uppercase tracking-tighter", isDev ? "mono text-[var(--accent)]" : "text-gray-900 dark:text-white")}>
+                        <h1 className={`text-4xl font-black uppercase tracking-tighter ${
+                            isDev ? "mono text-[var(--accent)]" : "text-gray-900 dark:text-white"
+                        }`}>
                             {isDev ? "ADMIN_POST_CONSTRUCTOR" : "Create Blog Post"}
                         </h1>
                         <p className="text-gray-500 dark:text-gray-400 mt-2 mono text-xs uppercase">
@@ -61,23 +62,21 @@ tags: [${tags.split(',').map(t => `"${t.trim()}"`).filter(t => t !== '""').join(
                     <div className="flex bg-white dark:bg-[#111] p-1 border border-gray-200 dark:border-[#222] rounded-lg shadow-sm">
                         <button
                             onClick={() => setView('edit')}
-                            className={clsx(
-                                "flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-md",
+                            className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-md ${
                                 view === 'edit' 
                                     ? (isDev ? "bg-[var(--accent)] text-black" : "bg-blue-600 text-white")
                                     : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
-                            )}
+                            }`}
                         >
                             <Edit3 size={16} /> Edit
                         </button>
                         <button
                             onClick={() => setView('preview')}
-                            className={clsx(
-                                "flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-md",
+                            className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-md ${
                                 view === 'preview'
                                     ? (isDev ? "bg-[var(--accent)] text-black" : "bg-blue-600 text-white")
                                     : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
-                            )}
+                            }`}
                         >
                             <Eye size={16} /> Preview
                         </button>
@@ -85,14 +84,13 @@ tags: [${tags.split(',').map(t => `"${t.trim()}"`).filter(t => t !== '""').join(
 
                     <button
                         onClick={copyToClipboard}
-                        className={clsx(
-                            "flex items-center gap-2 px-6 py-2.5 text-sm font-black uppercase transition-all border-2",
+                        className={`flex items-center gap-2 px-6 py-2.5 text-sm font-black uppercase transition-all border-2 ${
                             copied 
                                 ? "border-green-500 text-green-500 bg-green-500/5"
                                 : isDev 
                                     ? "border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black"
                                     : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                        )}
+                        }`}
                     >
                         {copied ? (
                             <>

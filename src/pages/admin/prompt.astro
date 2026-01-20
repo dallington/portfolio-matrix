@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { PromptConstructor } from "../../components/react/PromptConstructor";
+import { AdminGuard } from "../../components/react/AdminGuard";
+---
+
+<BaseLayout title="Prompt Constructor | Admin">
+  <main class="relative z-10">
+    <AdminGuard client:load>
+      <PromptConstructor client:load />
+    </AdminGuard>
+  </main>
+</BaseLayout>
