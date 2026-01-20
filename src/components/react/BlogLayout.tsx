@@ -167,7 +167,7 @@ export const BlogLayout = ({ post, onBack, previewMode = false }: BlogLayoutProp
 							))}
 						</div>
 						<h1
-							className={`text-4xl md:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] mb-8 ${isDev ? "mono uppercase" : "font-sans"}`}
+							className={`text-4xl md:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] mb-8 break-all ${isDev ? "mono uppercase" : "font-sans"}`}
 						>
 							{post.data.title}
 						</h1>

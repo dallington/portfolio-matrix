@@ -85,7 +85,7 @@ export const ProjectDetail = ({ project, children }: ProjectDetailProps) => {
 						</div>
 					)}
 					<h1
-						className={`text-6xl md:text-[8rem] font-black text-gray-900 dark:text-white mb-12 leading-[0.85] tracking-tight transition-all duration-1000 ${$isFocus ? 'text-5xl md:text-7xl mb-8' : ''} ${isDev ? "mono uppercase" : "font-sans"}`}
+						className={`text-6xl md:text-[8rem] font-black text-gray-900 dark:text-white mb-12 leading-[1.1]  break-all tracking-tight transition-all duration-1000 ${$isFocus ? 'text-5xl md:text-7xl mb-8' : ''} ${isDev ? "mono uppercase" : "font-sans"}`}
 					>
 						{isDev ? title.toUpperCase().replace(/\s+/g, "_") : title}
 					</h1>

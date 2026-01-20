@@ -24,6 +24,14 @@ export interface Project {
 		value: string;
 	}[];
 	layout?: "minimal" | "complete";
+	category: "showcase" | "in-progress" | "archived";
+	status?: "Planning" | "Developing" | "Refactoring" | "Completed";
+	progress?: number; // 0-100
+	updatedAt?: string;
+	changelog?: string[];
+	githubUrl?: string;
+	liveUrl?: string;
+	year?: string;
 }
 
 export interface BlogPost {
